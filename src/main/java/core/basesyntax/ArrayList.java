@@ -1,11 +1,12 @@
 package core.basesyntax;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class ArrayList<T> implements List<T> {
     private static final int DEFAULT_CAPACITY = 10;
     private static final double GROW_FACTOR = 1.5;
+    private static final int MIN_CAPACITY_INCREMENT = 1;
 
     private Object[] elementData;
     private int size;
@@ -17,13 +18,26 @@ public class ArrayList<T> implements List<T> {
     private void ensureCapacity() {
         if (size == elementData.length) {
             int newCapacity = (int) (elementData.length * GROW_FACTOR);
-            if (newCapacity < elementData.length + 1) {
-                newCapacity = elementData.length + 1;
+            if (newCapacity <= elementData.length) {
+                newCapacity = elementData.length + MIN_CAPACITY_INCREMENT;
             }
-            elementData = Arrays.copyOf(elementData, newCapacity);
+            Object[] newArray = new Object[newCapacity];
+            System.arraycopy(elementData, 0, newArray, 0, size);
+            elementData = newArray;
         }
     }
 
+    private void ensureCapacityForAddAll(int requiredCapacity) {
+        if (requiredCapacity > elementData.length) {
+            int newCapacity = (int) (elementData.length * GROW_FACTOR);
+            if (newCapacity < requiredCapacity) {
+                newCapacity = requiredCapacity;
+            }
+            Object[] newArray = new Object[newCapacity];
+            System.arraycopy(elementData, 0, newArray, 0, size);
+            elementData = newArray;
+        }
+    }
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
             throw new ArrayListIndexOutOfBoundsException("Index " + index
@@ -59,8 +73,13 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public void addAll(List<T> list) {
-        for (int i = 0; i < list.size(); i++) {
-            add(list.get(i));
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+        int elementsToAdd = list.size();
+        ensureCapacityForAddAll(size + elementsToAdd);
+        for (int i = 0; i < elementsToAdd; i++) {
+            elementData[size++] = list.get(i);
         }
     }
 
@@ -91,8 +110,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T remove(T element) {
         for (int i = 0; i < size; i++) {
-            if (element == elementData[i]
-                    || (element != null && element.equals(elementData[i]))) {
+            if (Objects.equals(element, elementData[i])) {
                 return remove(i);
             }
         }
