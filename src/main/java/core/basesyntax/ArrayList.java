@@ -23,12 +23,12 @@ public class ArrayList<T> implements List<T> {
 
     private void checkIndexForAdd(int index) {
         if (index < 0 || index > size) {
-            throw new ArrayListIndexOutOfBoundsException("Index " +  index
+            throw new ArrayListIndexOutOfBoundsException("Index " + index
             + " is out of bounds for size " + size);
         }
     }
 
-    private  void ensureCapacity(int minCapacity) {
+    private void ensureCapacity(int minCapacity) {
         if (minCapacity > elementData.length) {
             int newCapacity = (int) Math.ceil(elementData.length * GROW_FACTOR);
             if (newCapacity < minCapacity) {
@@ -50,6 +50,7 @@ public class ArrayList<T> implements List<T> {
         elementData[size] = value;
         size++;
     }
+
     @Override
     public void add(T value, int index) {
         checkIndexForAdd(index);
@@ -58,6 +59,7 @@ public class ArrayList<T> implements List<T> {
         elementData[index] = value;
         size++;
     }
+
     @Override
     public void addAll(List<T> list) {
         int listSize = list.size();
@@ -67,29 +69,32 @@ public class ArrayList<T> implements List<T> {
         ensureCapacity(size + listSize);
         Object[] sourceArray;
         if (list instanceof ArrayList) {
-            sourceArray = new  Object[listSize];
+            sourceArray = new Object[listSize];
             for (int i = 0; i < listSize; i++) {
                 sourceArray[i] = list.get(i);
             }
         } else {
             sourceArray = new Object[listSize];
-            for (int i = 0; i < listSize; i++) {
+                for (int i = 0; i < listSize; i++) {
             sourceArray[i] = list.get(i);
             }
         }
-        System.arraycopy(sourceArray, 0, elementData, size,  listSize);
+        System.arraycopy(sourceArray, 0, elementData, size, listSize);
         size += listSize;
     }
+
     @Override
     public T get(int index) {
         checkIndex(index);
         return (T)  elementData[index];
     }
+
     @Override
     public void set(T value, int index) {
         checkIndex(index);
         elementData[index] = value;
     }
+
     @Override
     public T remove(int index) {
         checkIndex(index);
@@ -101,6 +106,7 @@ public class ArrayList<T> implements List<T> {
         elementData[--size] = null;
         return removedValue;
     }
+
     @Override
     public T remove(T element) {
         for (int i = 0; i < size; i++) {
@@ -116,10 +122,12 @@ public class ArrayList<T> implements List<T> {
         }
         throw new NoSuchElementException("Element " + element + " not found in the list.");
     }
+
     @Override
     public int size() {
         return size;
     }
+
     @Override
     public boolean isEmpty() {
         return size == 0;
