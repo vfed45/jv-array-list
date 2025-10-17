@@ -75,8 +75,8 @@ public class ArrayList<T> implements List<T> {
             }
         } else {
             sourceArray = new Object[listSize];
-                for (int i = 0; i < listSize; i++) {
-            sourceArray[i] = list.get(i);
+            for (int i = 0; i < listSize; i++) {
+                sourceArray[i] = list.get(i);
             }
         }
         System.arraycopy(sourceArray, 0, elementData, size, listSize);
@@ -86,7 +86,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T get(int index) {
         checkIndex(index);
-        return (T)  elementData[index];
+        return (T) elementData[index];
     }
 
     @Override
